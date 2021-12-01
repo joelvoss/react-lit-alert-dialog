@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { render, userEvent } from './test-utils';
-import { axe } from 'jest-axe';
 
 import {
 	AlertDialog,
@@ -42,8 +41,7 @@ describe('<AlertDialog />', () => {
 
 	it('should not have ARIA violations', async () => {
 		let { container } = render(<Comp />);
-		let results = await axe(container);
-		expect(results).toHaveNoViolations();
+		await expect(container).toHaveNoAxeViolations();
 	});
 
 	it('should open an alert dialog', async () => {
