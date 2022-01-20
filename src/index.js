@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useEffect, useContext } from 'react';
+import * as React from 'react';
 import { DialogOverlay, DialogContent } from '@react-lit/dialog';
 import { useId } from '@react-lit/auto-id';
 import {
@@ -28,9 +28,9 @@ const AlertDialogContext = createNamedContext('AlertDialogContext', {});
  *
  * Note: You must render an `<AlertDialogContent>` inside.
  */
-const AlertDialogOverlay = forwardRef(
+const AlertDialogOverlay = React.forwardRef(
 	({ leastDestructiveRef, ...props }, forwardedRef) => {
-		const ownRef = useRef(null);
+		const ownRef = React.useRef(null);
 		const ref = useComposeRefs(forwardedRef, ownRef);
 		const id = useId(props.id);
 		const labelId = id ? makeId('alert-dialog', id) : undefined;
@@ -65,39 +65,41 @@ const AlertDialogOverlay = forwardRef(
  *
  * Note: Must be a child of `AlertDialogOverlay`.
  */
-const AlertDialogContent = forwardRef(({ children, ...props }, parentRef) => {
-	/** @type {AlertDialogContextValue} */
-	const { descriptionId, labelId, leastDestructiveRef, overlayRef } =
-		useContext(AlertDialogContext);
+const AlertDialogContent = React.forwardRef(
+	({ children, ...props }, parentRef) => {
+		/** @type {AlertDialogContextValue} */
+		const { descriptionId, labelId, leastDestructiveRef, overlayRef } =
+			React.useContext(AlertDialogContext);
 
-	useEffect(() => {
-		const ownerDocument = getOwnerDocument(overlayRef.current);
+		React.useEffect(() => {
+			const ownerDocument = getOwnerDocument(overlayRef.current);
 
-		if (labelId && ownerDocument.getElementById(labelId) == null) {
-			throw new Error(
-				`'<AlertDialogLabel>' must be rendered inside a '<AlertDialog>'`,
-			);
-		}
+			if (labelId && ownerDocument.getElementById(labelId) == null) {
+				throw new Error(
+					`'<AlertDialogLabel>' must be rendered inside a '<AlertDialog>'`,
+				);
+			}
 
-		if (leastDestructiveRef == null) {
-			throw new Error(
-				`'leastDestructiveRef' must be provided to '<AlertDialog>' or '<AlertDialogOverlay>'`,
-			);
-		}
-	}, [labelId, leastDestructiveRef, overlayRef]);
+			if (leastDestructiveRef == null) {
+				throw new Error(
+					`'leastDestructiveRef' must be provided to '<AlertDialog>' or '<AlertDialogOverlay>'`,
+				);
+			}
+		}, [labelId, leastDestructiveRef, overlayRef]);
 
-	return (
-		<DialogContent
-			role="alertdialog"
-			aria-describedby={descriptionId}
-			aria-labelledby={props['aria-label'] ? undefined : labelId}
-			{...props}
-			ref={parentRef}
-		>
-			{children}
-		</DialogContent>
-	);
-});
+		return (
+			<DialogContent
+				role="alertdialog"
+				aria-describedby={descriptionId}
+				aria-labelledby={props['aria-label'] ? undefined : labelId}
+				{...props}
+				ref={parentRef}
+			>
+				{children}
+			</DialogContent>
+		);
+	},
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -108,10 +110,10 @@ const AlertDialogContent = forwardRef(({ children, ...props }, parentRef) => {
  * Note: This is required. The `<AlertDialog>` will throw an error of no label
  * is rendered.
  */
-export const AlertDialogLabel = forwardRef(
+export const AlertDialogLabel = React.forwardRef(
 	({ as: Comp = 'div', ...props }, parentRef) => {
 		/** @type {AlertDialogContextValue} */
-		const { labelId } = useContext(AlertDialogContext);
+		const { labelId } = React.useContext(AlertDialogContext);
 		return <Comp {...props} ref={parentRef} id={labelId} />;
 	},
 );
@@ -122,10 +124,10 @@ export const AlertDialogLabel = forwardRef(
  * AlertDialogDescription renders additional content read by screen readers,
  * usually a longer description about what you need from the user.
  */
-export const AlertDialogDescription = forwardRef(
+export const AlertDialogDescription = React.forwardRef(
 	({ as: Comp = 'div', ...props }, parentRef) => {
 		/** @type {AlertDialogContextValue} */
-		const { descriptionId } = useContext(AlertDialogContext);
+		const { descriptionId } = React.useContext(AlertDialogContext);
 		return <Comp {...props} ref={parentRef} id={descriptionId} />;
 	},
 );
@@ -135,7 +137,7 @@ export const AlertDialogDescription = forwardRef(
 /**
  * AlertDialog renders a high-level component to render an alert dialog.
  */
-export const AlertDialog = forwardRef(
+export const AlertDialog = React.forwardRef(
 	({ id, isOpen, onDismiss, leastDestructiveRef, ...props }, parentRef) => (
 		<AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
 			<AlertDialogContent ref={parentRef} {...props} />
