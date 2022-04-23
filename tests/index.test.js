@@ -47,13 +47,13 @@ describe('<AlertDialog />', () => {
 	it('should open an alert dialog', async () => {
 		const { queryByText } = render(<Comp />);
 		expect(queryByText(/cancel/i)).toBeNull();
-		userEvent.click(queryByText(/show/i));
+		await userEvent.click(queryByText(/show/i));
 		expect(queryByText(/cancel/i)).toBeTruthy();
 	});
 
 	it('should focus the least destructive ref', async () => {
 		const { queryByText } = render(<Comp />);
-		userEvent.click(queryByText(/show/i));
+		await userEvent.click(queryByText(/show/i));
 		expect(document.activeElement).toBe(queryByText(/cancel/i));
 	});
 

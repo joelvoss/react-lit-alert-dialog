@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import * as React from 'react';
 import {
 	AlertDialog,
 	AlertDialogLabel,
@@ -6,8 +6,8 @@ import {
 } from '../../src/index';
 
 export function Example() {
-	const [showDialog, setShowDialog] = useState(false);
-	const cancelRef = useRef();
+	const [showDialog, setShowDialog] = React.useState(false);
+	const cancelRef = React.useRef();
 	const open = () => setShowDialog(true);
 	const close = () => setShowDialog(false);
 
